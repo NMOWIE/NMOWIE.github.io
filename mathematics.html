@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คณิตศาสตร์ ม.1–ม.6 | CalcVortex</title>
+<meta name="description" content="เลือกระดับชั้นและหัวข้อคณิตศาสตร์ ม.1–ม.6 พร้อมสรุปเนื้อหา สูตร และแบบฝึกหัด">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html" aria-current="page">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html">Python</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span>คณิตศาสตร์</div>
+      <h1 id="grade-title">คณิตศาสตร์ ม.1–ม.6</h1>
+      <p style="color:var(--ink-soft); max-width:560px;" id="grade-desc">เลือกระดับชั้นเพื่อดูหัวข้อทั้งหมด แต่ละหัวข้อมีสรุปเนื้อหา สูตรสำคัญ ตัวอย่างโจทย์ เทคนิค และแบบฝึกหัด</p>
+
+      <div class="grade-tabs" id="grade-tabs" role="tablist" aria-label="เลือกระดับชั้น"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="topic-grid" id="topic-grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex</span>
+      <span><a href="../index.html">กลับหน้าแรก</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../content/mathematics-data.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  const GRADE_ORDER = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
+
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function renderTabs(activeGrade) {
+    const wrap = document.getElementById('grade-tabs');
+    wrap.innerHTML = '';
+    GRADE_ORDER.forEach(key => {
+      const grade = MATH_CURRICULUM[key];
+      const btn = document.createElement('button');
+      btn.className = 'grade-tab' + (key === activeGrade ? ' active' : '');
+      btn.textContent = grade.label;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', String(key === activeGrade));
+      btn.addEventListener('click', () => {
+        const url = new URL(window.location);
+        url.searchParams.set('grade', key);
+        window.history.pushState({}, '', url);
+        loadGrade(key);
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function renderTopics(gradeKey) {
+    const grade = MATH_CURRICULUM[gradeKey];
+    const grid = document.getElementById('topic-grid');
+    grid.innerHTML = '';
+    grade.topics.forEach(topic => {
+      const ready = Boolean(topic.lesson);
+      const el = document.createElement(ready ? 'a' : 'div');
+      el.className = 'topic-card' + (ready ? '' : ' disabled');
+      if (ready) el.href = `lesson.html?topic=${topic.id}`;
+      el.innerHTML = `
+        <span class="t-name">${topic.title}</span>
+        <span class="t-status ${ready ? 'ready' : 'soon'}">${ready ? 'พร้อมเรียน' : 'กำลังจัดทำ'}</span>
+      `;
+      grid.appendChild(el);
+    });
+  }
+
+  function loadGrade(gradeKey) {
+    const grade = MATH_CURRICULUM[gradeKey];
+    document.getElementById('grade-title').textContent = `คณิตศาสตร์ ${grade.fullLabel}`;
+    renderTabs(gradeKey);
+    renderTopics(gradeKey);
+  }
+
+  const initialGrade = GRADE_ORDER.includes(getParam('grade')) ? getParam('grade') : 'm4';
+  loadGrade(initialGrade);
+</script>
+</body>
+</html>

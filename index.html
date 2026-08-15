@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalcVortex — เรียนคณิตศาสตร์ให้เข้าใจง่าย</title>
+<meta name="description" content="CalcVortex แพลตฟอร์มเรียนคณิตศาสตร์ ม.1–ม.6 พร้อมสรุปบทเรียน สูตรสำคัญ ตัวอย่างโจทย์ เครื่องคิดเลขวิทยาศาสตร์ และพื้นฐาน Python">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html" aria-current="page">หน้าแรก</a></li>
+        <li><a href="pages/mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="pages/calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="pages/python.html">Python</a></li>
+        <li><a href="pages/about.html">เกี่ยวกับเรา</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-vortex" aria-hidden="true">
+      <svg viewBox="0 0 400 400" fill="none">
+        <circle cx="200" cy="200" r="180" stroke="#2A63F6" stroke-opacity="0.12" stroke-width="1.5"/>
+        <circle cx="200" cy="200" r="145" stroke="#2A63F6" stroke-opacity="0.16" stroke-width="1.5"/>
+        <circle cx="200" cy="200" r="110" stroke="#17B8A6" stroke-opacity="0.22" stroke-width="1.5"/>
+        <circle cx="200" cy="200" r="75" stroke="#F5A623" stroke-opacity="0.3" stroke-width="1.5"/>
+        <path d="M200 20 A180 180 0 0 1 380 200" stroke="#2A63F6" stroke-width="3" stroke-linecap="round"/>
+        <path d="M200 90 A110 110 0 0 1 310 200" stroke="#17B8A6" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="hero-symbols" aria-hidden="true">
+      <span style="top:12%; left:58%;">π</span>
+      <span style="top:62%; left:66%;">∑</span>
+      <span style="top:38%; left:78%;">√</span>
+      <span style="top:80%; left:52%;">∫</span>
+    </div>
+
+    <div class="container">
+      <div class="hero-content">
+        <span class="eyebrow">แพลตฟอร์มเรียนคณิตศาสตร์ ม.1–ม.6</span>
+        <h1>เรียนคณิตศาสตร์ให้เข้าใจง่าย<br>พร้อม<span class="accent">เครื่องมือ</span>ที่ช่วยให้การเรียนของคุณง่ายขึ้น</h1>
+        <p class="hero-sub">สรุปบทเรียน สูตรสำคัญ ตัวอย่างโจทย์ทีละขั้นตอน เครื่องคิดเลขวิทยาศาสตร์ และพื้นฐาน Python ครบในที่เดียว ออกแบบมาเพื่อนักเรียนโดยเฉพาะ</p>
+        <div class="hero-actions">
+          <a href="pages/mathematics.html" class="btn btn-primary">เริ่มเรียน</a>
+          <a href="pages/calculator.html" class="btn btn-secondary">เปิดเครื่องคิดเลข</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>6 ระดับชั้น</b><span>ม.1 ถึง ม.6</span></div>
+          <div class="hero-stat"><b>25+ หัวข้อ</b><span>ครอบคลุมหลักสูตร</span></div>
+          <div class="hero-stat"><b>12 บท Python</b><span>สำหรับผู้เริ่มต้น</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GRADE SELECTOR ============ -->
+  <section class="section" id="grades">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">เลือกระดับชั้น</span>
+          <h2>เริ่มต้นจากชั้นเรียนของคุณ</h2>
+        </div>
+        <p>แต่ละระดับชั้นมีสรุปเนื้อหา สูตร และแบบฝึกหัดครบตามหลักสูตร</p>
+      </div>
+      <div class="grade-grid">
+        <a class="grade-card" href="pages/mathematics.html?grade=m1"><div class="num">ม.1</div><div class="lbl">มัธยมต้น</div></a>
+        <a class="grade-card" href="pages/mathematics.html?grade=m2"><div class="num">ม.2</div><div class="lbl">มัธยมต้น</div></a>
+        <a class="grade-card" href="pages/mathematics.html?grade=m3"><div class="num">ม.3</div><div class="lbl">มัธยมต้น</div></a>
+        <a class="grade-card" href="pages/mathematics.html?grade=m4"><div class="num">ม.4</div><div class="lbl">มัธยมปลาย</div></a>
+        <a class="grade-card" href="pages/mathematics.html?grade=m5"><div class="num">ม.5</div><div class="lbl">มัธยมปลาย</div></a>
+        <a class="grade-card" href="pages/mathematics.html?grade=m6"><div class="num">ม.6</div><div class="lbl">มัธยมปลาย</div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORY / TOOL HIGHLIGHTS ============ -->
+  <section class="section" id="tools" style="background:var(--surface-card); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-eyebrow">เครื่องมือเด่น</span>
+          <h2>ทุกอย่างที่ต้องใช้ในการเรียนคณิตศาสตร์</h2>
+        </div>
+      </div>
+      <div class="card-grid">
+        <div class="feature-card">
+          <div class="feature-icon blue">📖</div>
+          <h3>ชีทสรุปบทเรียน</h3>
+          <p>อ่านเนื้อหาแบบกระชับ เข้าใจง่าย พร้อมสูตรสำคัญที่มักออกข้อสอบในแต่ละบท</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon amber">✏️</div>
+          <h3>ตัวอย่างโจทย์ทีละขั้นตอน</h3>
+          <p>ดูวิธีคิดและวิธีทำแบบละเอียด ตั้งแต่โจทย์ไปจนถึงคำตอบ ไม่ข้ามขั้นตอนสำคัญ</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon teal">🧮</div>
+          <h3>เครื่องคิดเลขวิทยาศาสตร์</h3>
+          <p>คำนวณตรีโกณมิติ ลอการิทึม และฟังก์ชันต่าง ๆ พร้อมประวัติการคำนวณย้อนหลัง</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon blue">🎯</div>
+          <h3>แบบฝึกหัดท้ายบท</h3>
+          <p>ฝึกทำโจทย์ทันทีหลังอ่านเนื้อหา เพื่อทบทวนความเข้าใจในแต่ละหัวข้อ</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon amber">💡</div>
+          <h3>เทคนิคและข้อควรระวัง</h3>
+          <p>รวมจุดที่ข้อสอบมักออกและข้อผิดพลาดที่พบบ่อย เพื่อให้ทำโจทย์ได้แม่นยำขึ้น</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon teal">🔍</div>
+          <h3>ค้นหาเนื้อหาได้รวดเร็ว</h3>
+          <p>พิมพ์ชื่อบทหรือสูตรที่ต้องการ ระบบจะแสดงบทเรียนและสูตรที่เกี่ยวข้องทันที</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PYTHON PROMO ============ -->
+  <section class="section" id="python">
+    <div class="container">
+      <div class="python-band">
+        <div>
+          <span class="section-eyebrow">หมวดใหม่</span>
+          <h2>เริ่มต้นเขียนโปรแกรมด้วย Python</h2>
+          <p>เรียนพื้นฐาน Python ตั้งแต่ตัวแปรไปจนถึงฟังก์ชัน พร้อมตัวอย่างโค้ด ผลลัพธ์ และแบบฝึกหัดในทุกบท</p>
+          <a href="pages/python.html" class="btn btn-secondary" style="background:transparent; color:#fff; border-color:rgba(255,255,255,0.3);">ดูหมวด Python</a>
+        </div>
+        <div class="code-chip">
+<span class="cm"># คำนวณค่าเฉลี่ยคะแนนสอบ</span>
+scores = [78, 85, 92, 66]
+<span class="kw">total</span> = sum(scores)
+average = total / len(scores)
+print(<span class="str">"คะแนนเฉลี่ยคือ"</span>, average)
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="brand" style="margin-bottom:10px;">
+          <span class="brand-mark">CV</span> CalcVortex
+        </a>
+        <p style="color:var(--ink-soft); font-size:0.92rem; max-width:280px;">แพลตฟอร์มเรียนและทบทวนคณิตศาสตร์ ม.1–ม.6 พร้อมเครื่องมือช่วยคำนวณและพื้นฐาน Python</p>
+      </div>
+      <div>
+        <h4>เรียนรู้</h4>
+        <ul>
+          <li><a href="pages/mathematics.html">คณิตศาสตร์</a></li>
+          <li><a href="pages/python.html">Python</a></li>
+          <li><a href="pages/calculator.html">เครื่องคิดเลข</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>ระดับชั้น</h4>
+        <ul>
+          <li><a href="pages/mathematics.html?grade=m1">ม.1 – ม.3</a></li>
+          <li><a href="pages/mathematics.html?grade=m4">ม.4 – ม.6</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>เว็บไซต์</h4>
+        <ul>
+          <li><a href="pages/about.html">เกี่ยวกับเรา</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex — สร้างขึ้นเพื่อการเรียนรู้ของนักเรียนไทย</span>
+      <span>เวอร์ชันเว็บไซต์ระยะที่ 1 (Phase 1)</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

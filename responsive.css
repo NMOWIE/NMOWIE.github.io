@@ -1,0 +1,66 @@
+/* ============================================================
+   CalcVortex — Responsive rules
+   Breakpoints: >=1024 desktop (default in style.css), 768–1023 tablet,
+   <768 mobile
+   ============================================================ */
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1023px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .grade-grid { grid-template-columns: repeat(3, 1fr); }
+  .topic-grid { grid-template-columns: repeat(2, 1fr); }
+  .python-band { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .hero-vortex { width: 460px; height: 460px; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 767px) {
+  .navbar .container { height: 64px; }
+  .nav-links {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 4px;
+    box-shadow: var(--shadow-md);
+    display: none;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px 16px; border-radius: var(--radius-sm); }
+  .nav-toggle { display: flex; }
+
+  .hero { padding: 56px 0 48px; }
+  .hero-vortex { display: none; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { justify-content: center; }
+  .hero-stats { gap: 22px; margin-top: 40px; }
+
+  .section { padding: 52px 0; }
+  .section-head { flex-direction: column; align-items: flex-start; }
+
+  .grade-grid { grid-template-columns: repeat(2, 1fr); }
+  .card-grid { grid-template-columns: 1fr; }
+  .topic-grid { grid-template-columns: 1fr; }
+
+  .python-band { padding: 28px 22px; }
+
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+
+  .grade-tabs { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .grade-tab { flex-shrink: 0; }
+
+  .lesson-body { padding: 36px 18px 72px; }
+  .formula-item { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 420px) {
+  .grade-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero h1 { font-size: 1.9rem; }
+}

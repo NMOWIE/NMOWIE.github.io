@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">บทเรียน | CalcVortex</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html" aria-current="page">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html">Python</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main id="lesson-root">
+  <!-- filled by JS -->
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex</span>
+      <span><a href="../index.html">กลับหน้าแรก</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../content/mathematics-data.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  const root = document.getElementById('lesson-root');
+  const topicId = getParam('topic');
+  const found = topicId ? findTopicById(topicId) : null;
+
+  if (!found || !found.topic.lesson) {
+    document.title = 'ไม่พบบทเรียน | CalcVortex';
+    root.innerHTML = `
+      <section class="section">
+        <div class="container">
+          <div class="empty-state">
+            <div class="glyph">🧭</div>
+            <h2>ยังไม่พบบทเรียนนี้</h2>
+            <p>เนื้อหาหัวข้อนี้กำลังจัดทำอยู่ กรุณากลับไปเลือกหัวข้ออื่นในหมวดคณิตศาสตร์</p>
+            <a href="mathematics.html" class="btn btn-primary">กลับไปหน้าคณิตศาสตร์</a>
+          </div>
+        </div>
+      </section>
+    `;
+  } else {
+    const { grade, topic } = found;
+    const lesson = topic.lesson;
+    document.title = `${topic.title} — ${grade.label} | CalcVortex`;
+
+    const formulasHtml = lesson.formulas.map(f => `
+      <div class="formula-item">
+        <span class="f-name">${esc(f.name)}</span>
+        <span class="f-expr">${esc(f.expr)}</span>
+      </div>
+    `).join('');
+
+    const examplesHtml = lesson.examples.map((ex, i) => `
+      <div class="example-card">
+        <span class="e-label">ตัวอย่างที่ ${i + 1}</span>
+        <div class="e-problem">${esc(ex.problem)}</div>
+        <div class="e-approach">แนวคิด: ${esc(ex.approach)}</div>
+        <pre class="e-solution">${esc(ex.solution)}</pre>
+        <span class="e-answer">คำตอบ: ${esc(ex.answer)}</span>
+      </div>
+    `).join('');
+
+    const tipsHtml = lesson.tips.map(t => `<li>${esc(t)}</li>`).join('');
+    const exercisesHtml = lesson.exercises.map(e => `<li>${esc(e)}</li>`).join('');
+
+    root.innerHTML = `
+      <section class="lesson-header">
+        <div class="container">
+          <div class="breadcrumb">
+            <a href="../index.html">หน้าแรก</a><span>/</span>
+            <a href="mathematics.html?grade=${found.gradeKey}">${esc(grade.label)}</a><span>/</span>
+            ${esc(topic.title)}
+          </div>
+          <span class="lesson-tag">${esc(grade.fullLabel)}</span>
+          <h1>${esc(topic.title)}</h1>
+        </div>
+      </section>
+
+      <div class="lesson-body">
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">📖</span><h2>สรุปเนื้อหา</h2></div>
+          <p>${esc(lesson.summary)}</p>
+        </div>
+
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">🧠</span><h2>สูตรสำคัญ</h2></div>
+          <div class="formula-list">${formulasHtml}</div>
+        </div>
+
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">✏️</span><h2>ตัวอย่างโจทย์</h2></div>
+          ${examplesHtml}
+        </div>
+
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">💡</span><h2>เทคนิค</h2></div>
+          <ul class="tip-list">${tipsHtml}</ul>
+        </div>
+
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">📝</span><h2>แบบฝึกหัด</h2></div>
+          <ol class="exercise-list">${exercisesHtml}</ol>
+        </div>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>
