@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ค้นหา | CalcVortex</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand"><span class="brand-mark">CV</span>CalcVortex</a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html">Python</a></li>
+        <li><a href="ai-assistant.html">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" aria-current="page" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span>ค้นหา</div>
+      <h1>ค้นหาเนื้อหา</h1>
+      <p style="color:var(--ink-soft); max-width:560px; margin-bottom:24px;">ค้นหาบทเรียน สูตร ตัวอย่างโจทย์ หรือเครื่องมือที่ต้องการ เช่น “ตรีโกณมิติ”, “sin²θ”, หรือ “python”</p>
+      <div style="max-width:520px; display:flex; gap:10px;">
+        <input id="search-input" type="text" placeholder="พิมพ์คำค้นหา..." autofocus
+               style="flex:1; padding:14px 18px; border-radius:999px; border:1.5px solid var(--border-strong); font-family:var(--font-body); font-size:1rem;">
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div id="search-status" style="color:var(--ink-soft); margin-bottom:20px; font-size:0.92rem;"></div>
+      <div class="topic-grid" id="search-results" style="margin-top:0;"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom"><span>© 2026 CalcVortex</span><span><a href="../index.html">กลับหน้าแรก</a></span></div>
+  </div>
+</footer>
+
+<script src="../content/mathematics-data.js"></script>
+<script src="../content/python-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/account.js"></script>
+<script src="../js/search.js"></script>
+<script>
+  const index = buildSearchIndex();
+  const input = document.getElementById('search-input');
+  const resultsEl = document.getElementById('search-results');
+  const statusEl = document.getElementById('search-status');
+
+  const TYPE_ICON = { lesson: '📖', formula: '🧠', example: '✏️', python: '🐍', tool: '🛠️' };
+
+  function render(query) {
+    if (!query.trim()) {
+      statusEl.textContent = '';
+      resultsEl.innerHTML = '';
+      return;
+    }
+    const results = runSearch(index, query);
+    statusEl.textContent = `พบ ${results.length} ผลลัพธ์สำหรับ “${query}”`;
+    resultsEl.innerHTML = results.length ? results.map(r => {
+      const tag = r.ready
+        ? `<span class="t-status ready">${TYPE_ICON[r.type] || '📄'} ${r.typeLabel}</span>`
+        : `<span class="t-status soon">กำลังจัดทำ</span>`;
+      const el = r.url ? 'a' : 'div';
+      const href = r.url ? `href="${r.url}"` : '';
+      return `<${el} class="topic-card${r.url ? '' : ' disabled'}" ${href}>
+        <span class="t-name">${escapeHtml(r.title)}${r.sub ? `<br><span style="font-family:var(--font-mono); font-size:0.82rem; color:var(--ink-soft); font-weight:400;">${escapeHtml(r.sub)}</span>` : ''}</span>
+        ${tag}
+      </${el}>`;
+    }).join('') : '<p style="color:var(--ink-soft);">ไม่พบผลลัพธ์ ลองใช้คำค้นหาอื่น</p>';
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  input.addEventListener('input', () => render(input.value));
+
+  const initialQ = new URLSearchParams(window.location.search).get('q') || '';
+  if (initialQ) { input.value = initialQ; render(initialQ); }
+</script>
+</body>
+</html>

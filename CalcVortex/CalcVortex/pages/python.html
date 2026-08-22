@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python เบื้องต้น | CalcVortex</title>
+<meta name="description" content="เรียน Python เบื้องต้น 12 บท ตั้งแต่ตัวแปรไปจนถึงฟังก์ชัน พร้อมตัวอย่างโค้ด ผลลัพธ์ และแบบฝึกหัด">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html" aria-current="page">Python</a></li>
+        <li><a href="ai-assistant.html">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span>Python</div>
+      <h1>Python เบื้องต้น</h1>
+      <p style="color:var(--ink-soft); max-width:600px;">เรียนรู้พื้นฐานการเขียนโปรแกรม Python ตั้งแต่ตัวแปร ชนิดข้อมูล ไปจนถึงฟังก์ชันและการแก้ปัญหา 12 บท พร้อมตัวอย่างโค้ดจริงและแบบฝึกหัดท้ายบท</p>
+      <div class="hero-actions" style="margin-top:24px;">
+        <a href="python-editor.html" class="btn btn-secondary">🖥️ เปิด Python Online Editor</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="topic-grid" id="python-topic-grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex</span>
+      <span><a href="../index.html">กลับหน้าแรก</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../content/python-data.js"></script>
+<script src="../js/account.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  const grid = document.getElementById('python-topic-grid');
+  grid.innerHTML = PYTHON_CURRICULUM
+    .slice()
+    .sort((a, b) => a.order - b.order)
+    .map(topic => {
+      const ready = Boolean(topic.lesson);
+      const tag = ready ? '' : ' disabled';
+      const el = ready ? 'a' : 'div';
+      const href = ready ? `href="python-lesson.html?topic=${topic.id}"` : '';
+      return `
+        <${el} class="topic-card${tag}" ${href}>
+          <span class="t-name">${String(topic.order).padStart(2, '0')}. ${topic.title}</span>
+          <span class="t-status ${ready ? 'ready' : 'soon'}">${ready ? 'พร้อมเรียน' : 'กำลังจัดทำ'}</span>
+        </${el}>
+      `;
+    })
+    .join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บัญชีของฉัน | CalcVortex</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand"><span class="brand-mark">CV</span>CalcVortex</a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html">Python</a></li>
+        <li><a href="ai-assistant.html">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link" aria-current="page">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span>บัญชีของฉัน</div>
+      <h1>บัญชีของฉัน</h1>
+      <p style="color:var(--ink-soft); max-width:600px;">บันทึกความคืบหน้าการเรียนและบทเรียนที่บันทึกไว้ ระบบนี้เป็นโหมดสาธิตที่เก็บข้อมูลไว้ในเบราว์เซอร์ของคุณเท่านั้น (ยังไม่เชื่อมต่อเซิร์ฟเวอร์จริง) ข้อมูลจะไม่ซิงก์ข้ามอุปกรณ์</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Signed OUT view -->
+      <div id="signed-out-view" class="feature-card" style="max-width:420px; margin:0 auto;">
+        <div class="feature-icon blue">👤</div>
+        <h3>เข้าสู่ระบบ (โหมดสาธิต)</h3>
+        <p>พิมพ์ชื่อที่ต้องการใช้แสดงผล ไม่ต้องใช้รหัสผ่านเพราะเป็นโหมดสาธิตที่เก็บข้อมูลในเครื่องของคุณเท่านั้น</p>
+        <form id="signin-form" style="display:flex; gap:10px; margin-top:16px;">
+          <input id="signin-name" type="text" placeholder="ชื่อของคุณ" required
+                 style="flex:1; padding:12px 14px; border-radius:var(--radius-sm); border:1.5px solid var(--border-strong); font-family:var(--font-body); font-size:0.95rem;">
+          <button type="submit" class="btn btn-primary" style="padding:12px 20px;">เข้าสู่ระบบ</button>
+        </form>
+      </div>
+
+      <!-- Signed IN view -->
+      <div id="signed-in-view" style="display:none;">
+        <div class="feature-card" style="margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+          <div>
+            <span class="section-eyebrow">ยินดีต้อนรับกลับ</span>
+            <h2 id="welcome-name" style="margin:0;">—</h2>
+          </div>
+          <button id="signout-btn" class="btn btn-secondary">ออกจากระบบ</button>
+        </div>
+
+        <div class="card-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom:32px;">
+          <div class="feature-card">
+            <div class="feature-icon teal">✅</div>
+            <h3 id="stat-completed">0</h3>
+            <p>บทเรียนที่เรียนจบแล้ว</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon amber">📝</div>
+            <h3 id="stat-quizzes">0</h3>
+            <p>แบบทดสอบที่ทำแล้ว</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon blue">🔖</div>
+            <h3 id="stat-bookmarks">0</h3>
+            <p>บทเรียนที่บันทึกไว้</p>
+          </div>
+        </div>
+
+        <div class="section-head"><h2 style="font-size:1.2rem;">บทเรียนที่บันทึกไว้ (Bookmark)</h2></div>
+        <div class="topic-grid" id="bookmark-list" style="margin-top:0; margin-bottom:40px;"></div>
+
+        <div class="section-head"><h2 style="font-size:1.2rem;">คะแนนแบบทดสอบล่าสุด</h2></div>
+        <div class="topic-grid" id="quiz-score-list" style="margin-top:0;"></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom"><span>© 2026 CalcVortex</span><span><a href="../index.html">กลับหน้าแรก</a></span></div>
+  </div>
+</footer>
+
+<script src="../content/mathematics-data.js"></script>
+<script src="../content/python-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/account.js"></script>
+<script>
+  function titleForTopic(topicId) {
+    const math = findTopicById(topicId);
+    if (math) return `${math.topic.title} (${math.grade.label})`;
+    const py = findPythonTopicById(topicId);
+    if (py) return `Python: ${py.topic.title}`;
+    return topicId;
+  }
+
+  function linkForTopic(topicId) {
+    const math = findTopicById(topicId);
+    if (math) return `lesson.html?topic=${topicId}`;
+    const py = findPythonTopicById(topicId);
+    if (py) return `python-lesson.html?topic=${topicId}`;
+    return '#';
+  }
+
+  function render() {
+    const user = CVAccount.getUser();
+    document.getElementById('signed-out-view').style.display = user ? 'none' : 'block';
+    document.getElementById('signed-in-view').style.display = user ? 'block' : 'none';
+    if (!user) return;
+
+    document.getElementById('welcome-name').textContent = user.name;
+
+    const progress = CVAccount.getProgress();
+    const bookmarks = CVAccount.getBookmarks();
+
+    document.getElementById('stat-completed').textContent = progress.completedLessons.length;
+    document.getElementById('stat-quizzes').textContent = Object.keys(progress.quizScores).length;
+    document.getElementById('stat-bookmarks').textContent = bookmarks.length;
+
+    const bmList = document.getElementById('bookmark-list');
+    bmList.innerHTML = bookmarks.length
+      ? bookmarks.map(id => `
+          <a class="topic-card" href="${linkForTopic(id)}">
+            <span class="t-name">${titleForTopic(id)}</span>
+            <span class="arrow">→</span>
+          </a>`).join('')
+      : '<p style="color:var(--ink-soft);">ยังไม่มีบทเรียนที่บันทึกไว้ กด 🔖 ในหน้าบทเรียนเพื่อบันทึก</p>';
+
+    const qList = document.getElementById('quiz-score-list');
+    const entries = Object.entries(progress.quizScores);
+    qList.innerHTML = entries.length
+      ? entries.map(([id, r]) => `
+          <div class="topic-card" style="cursor:default;">
+            <span class="t-name">${titleForTopic(id)}</span>
+            <span class="t-status ready">${r.score}/${r.total}</span>
+          </div>`).join('')
+      : '<p style="color:var(--ink-soft);">ยังไม่มีประวัติการทำแบบทดสอบ</p>';
+  }
+
+  document.getElementById('signin-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('signin-name').value;
+    CVAccount.signIn(name);
+    render();
+  });
+  document.getElementById('signout-btn').addEventListener('click', () => {
+    CVAccount.signOut();
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>

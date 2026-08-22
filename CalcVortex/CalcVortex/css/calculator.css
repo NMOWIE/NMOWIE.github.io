@@ -1,0 +1,193 @@
+/* ============================================================
+   CalcVortex — calculator.css
+   Scientific / Engineering Calculator (Phase 2)
+   ============================================================ */
+
+.calc-shell {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ---------- Calculator card ---------- */
+.calc-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 22px;
+}
+
+.calc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.calc-toolbar-left {
+  display: flex;
+  gap: 8px;
+}
+.mode-btn {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-strong);
+  background: #fff;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.mode-btn:hover { border-color: var(--primary); color: var(--primary-dark); }
+.mode-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+#angle-mode-btn { min-width: 56px; }
+
+.calc-screen {
+  background: linear-gradient(160deg, #16233A, #22345A);
+  border-radius: var(--radius-md);
+  padding: 26px 22px;
+  margin-bottom: 18px;
+  text-align: right;
+  min-height: 92px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow-x: auto;
+}
+.calc-screen span {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  color: #fff;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Keypad ---------- */
+.calc-keypad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.key {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 15px 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.key:hover { background: #fff; box-shadow: var(--shadow-sm); }
+.key:active { transform: scale(0.96); }
+
+.key-fn { color: var(--primary-dark); background: var(--primary-tint); border-color: transparent; }
+.key-fn:hover { background: #DCE9FF; }
+
+.key-op {
+  background: var(--primary);
+  color: #fff;
+  border-color: transparent;
+  font-size: 1.15rem;
+}
+.key-op:hover { background: var(--primary-dark); }
+
+.key-equals {
+  background: var(--accent-teal);
+  color: #fff;
+  border-color: transparent;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+.key-equals:hover { background: #0E9C8D; }
+
+.key-clear { color: #C0392B; background: #FDEDEC; border-color: transparent; }
+.key-clear:hover { background: #FBDAD6; }
+
+.key-wide { grid-column: span 2; }
+
+/* ---------- History panel ---------- */
+.history-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  max-height: 640px;
+  display: flex;
+  flex-direction: column;
+}
+.history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.history-head h3 { font-size: 1rem; margin: 0; }
+.history-clear-btn {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.history-clear-btn:hover { color: var(--primary); }
+
+#history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+}
+.history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.history-item:hover { background: var(--primary-tint); }
+.history-item .h-expr {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  word-break: break-all;
+}
+.history-item .h-result {
+  font-family: var(--font-mono);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.history-empty {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  text-align: center;
+  padding: 24px 8px;
+}
+
+@media (max-width: 1023px) {
+  .calc-shell { grid-template-columns: 1fr; }
+  .history-card { max-height: 320px; }
+}
+
+@media (max-width: 480px) {
+  .calc-keypad { gap: 6px; }
+  .key { padding: 13px 0; font-size: 0.9rem; }
+}

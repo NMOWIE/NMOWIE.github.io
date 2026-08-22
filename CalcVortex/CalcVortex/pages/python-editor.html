@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Online Editor | CalcVortex</title>
+<meta name="description" content="เขียนและรันโค้ด Python ได้ทันทีในเบราว์เซอร์ ไม่ต้องติดตั้งอะไรเพิ่มเติม">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html" aria-current="page">Python</a></li>
+        <li><a href="ai-assistant.html">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span><a href="python.html">Python</a><span>/</span>Python Online Editor</div>
+      <h1>Python Online Editor</h1>
+      <p style="color:var(--ink-soft); max-width:600px;">เขียนโค้ด Python แล้วกด "รันโค้ด" เพื่อดูผลลัพธ์ทันที ทำงานอยู่ในเบราว์เซอร์ของคุณทั้งหมด ไม่ต้องติดตั้งโปรแกรมเพิ่มเติม</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="editor-shell">
+        <div class="editor-pane">
+          <div class="editor-pane-head">
+            <span>main.py</span>
+            <div style="display:flex; gap:8px;">
+              <button class="run-btn" id="run-btn" disabled>⏳ กำลังโหลด Python…</button>
+            </div>
+          </div>
+          <textarea id="code-editor" spellcheck="false">print("สวัสดี, CalcVortex!")
+
+scores = [78, 85, 92, 66]
+average = sum(scores) / len(scores)
+print("คะแนนเฉลี่ยคือ", average)
+
+for i in range(1, 4):
+    print("รอบที่", i)</textarea>
+        </div>
+        <div class="console-pane">
+          <div class="console-pane-head">
+            <span>ผลลัพธ์ (Console)</span>
+            <button class="run-btn" id="clear-btn" style="background:var(--ink-soft);">ล้างผลลัพธ์</button>
+          </div>
+          <div id="console-output"><span class="muted">กำลังเตรียม Python runtime (Pyodide)… อาจใช้เวลาสักครู่ในการโหลดครั้งแรก</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex</span>
+      <span><a href="../index.html">กลับหน้าแรก</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/account.js"></script>
+<script src="../js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+  const runBtn = document.getElementById('run-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const editor = document.getElementById('code-editor');
+  const consoleEl = document.getElementById('console-output');
+
+  function writeConsole(text, isError) {
+    const span = document.createElement('span');
+    if (isError) span.className = 'err';
+    span.textContent = text;
+    consoleEl.appendChild(span);
+    consoleEl.scrollTop = consoleEl.scrollHeight;
+  }
+
+  function resetConsole(message) {
+    consoleEl.innerHTML = message ? `<span class="muted">${message}</span>` : '';
+  }
+
+  let pyodide = null;
+
+  async function setup() {
+    try {
+      pyodide = await loadPyodide();
+      pyodide.setStdout({ batched: (msg) => writeConsole(msg + '\n', false) });
+      pyodide.setStderr({ batched: (msg) => writeConsole(msg + '\n', true) });
+      runBtn.disabled = false;
+      runBtn.textContent = '▶ รันโค้ด';
+      resetConsole('พร้อมแล้ว — กด "รันโค้ด" เพื่อดูผลลัพธ์');
+    } catch (err) {
+      resetConsole('');
+      writeConsole('ไม่สามารถโหลด Python runtime ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองรีเฟรชหน้านี้ใหม่\n' + err, true);
+    }
+  }
+
+  async function runCode() {
+    if (!pyodide) return;
+    resetConsole('');
+    runBtn.disabled = true;
+    runBtn.textContent = '⏳ กำลังรัน…';
+    try {
+      await pyodide.runPythonAsync(editor.value);
+    } catch (err) {
+      writeConsole(String(err), true);
+    } finally {
+      runBtn.disabled = false;
+      runBtn.textContent = '▶ รันโค้ด';
+    }
+  }
+
+  runBtn.addEventListener('click', runCode);
+  clearBtn.addEventListener('click', () => resetConsole(''));
+
+  // Allow Ctrl/Cmd+Enter inside the editor to run the code
+  editor.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      runCode();
+    }
+  });
+
+  setup();
+</script>
+</body>
+</html>

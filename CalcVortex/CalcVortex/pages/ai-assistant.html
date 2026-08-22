@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI ช่วยเรียน | CalcVortex</title>
+<meta name="description" content="ถามคำถามคณิตศาสตร์หรือ Python แล้วให้ AI ช่วยอธิบายทีละขั้นตอน">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html">Python</a></li>
+        <li><a href="ai-assistant.html" aria-current="page">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span>AI ช่วยเรียน</div>
+      <h1>AI ช่วยเรียน</h1>
+      <p style="color:var(--ink-soft); max-width:600px;">ถามคำถามเกี่ยวกับคณิตศาสตร์ ม.1–ม.6 หรือ Python เบื้องต้น ให้ AI ช่วยอธิบายทีละขั้นตอนด้วยภาษาที่เข้าใจง่าย</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="chat-shell">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-bubble assistant">สวัสดีครับ! ผมคือผู้ช่วย AI ของ CalcVortex 🧮 ลองถามโจทย์คณิตศาสตร์หรือ Python ที่ติดขัดได้เลย เช่น "sin(30°) หาได้ยังไง" หรือ "for loop กับ while loop ต่างกันยังไง"</div>
+        </div>
+        <div class="chat-input-row">
+          <textarea id="chat-input" rows="1" placeholder="พิมพ์คำถามของคุณ..."></textarea>
+          <button class="btn btn-primary" id="send-btn">ส่ง</button>
+        </div>
+      </div>
+      <p class="chat-disclaimer">ผู้ช่วย AI อาจตอบผิดพลาดได้บ้าง ควรตรวจสอบคำตอบกับครูผู้สอนหรือชีทสรุปบทเรียนอีกครั้ง</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex</span>
+      <span><a href="../index.html">กลับหน้าแรก</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/account.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  const messagesEl = document.getElementById('chat-messages');
+  const inputEl = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('send-btn');
+
+  const SYSTEM_PROMPT = "คุณคือผู้ช่วยติวเตอร์ของ CalcVortex ซึ่งเป็นเว็บไซต์เรียนคณิตศาสตร์ ม.1–ม.6 และ Python เบื้องต้นสำหรับนักเรียนไทย " +
+    "หน้าที่ของคุณคืออธิบายโจทย์คณิตศาสตร์และแนวคิดการเขียนโปรแกรม Python ให้นักเรียนมัธยมเข้าใจง่าย ตอบเป็นภาษาไทย อธิบายทีละขั้นตอนอย่างกระชับ " +
+    "ใช้ตัวอย่างประกอบเมื่อช่วยให้เข้าใจง่ายขึ้น หากคำถามอยู่นอกเหนือคณิตศาสตร์และการเขียนโปรแกรมเบื้องต้น ให้ตอบอย่างสุภาพว่าเชี่ยวชาญเฉพาะสองด้านนี้";
+
+  const history = [];
+  let busy = false;
+
+  function addBubble(role, text) {
+    const div = document.createElement('div');
+    div.className = `chat-bubble ${role}`;
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text || busy) return;
+
+    busy = true;
+    sendBtn.disabled = true;
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+
+    addBubble('user', text);
+    history.push({ role: 'user', content: text });
+
+    const thinking = addBubble('assistant thinking', 'กำลังคิดคำตอบ...');
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: history,
+        }),
+      });
+
+      if (!response.ok) throw new Error('request-failed:' + response.status);
+
+      const data = await response.json();
+      const replyText = (data.content || [])
+        .map(block => (block.type === 'text' ? block.text : ''))
+        .filter(Boolean)
+        .join('\n')
+        .trim();
+
+      if (!replyText) throw new Error('empty-response');
+
+      thinking.textContent = replyText;
+      thinking.classList.remove('thinking');
+      history.push({ role: 'assistant', content: replyText });
+    } catch (err) {
+      thinking.textContent = 'ขออภัย ไม่สามารถเชื่อมต่อผู้ช่วย AI ได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง หรือกลับไปอ่านชีทสรุปบทเรียนในระหว่างนี้';
+      thinking.classList.remove('thinking');
+      history.pop(); // remove the unanswered user turn so retry doesn't duplicate context awkwardly
+    } finally {
+      busy = false;
+      sendBtn.disabled = false;
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+  inputEl.addEventListener('input', () => {
+    inputEl.style.height = 'auto';
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+  });
+</script>
+</body>
+</html>

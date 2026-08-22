@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">บทเรียน Python | CalcVortex</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html" aria-current="page">Python</a></li>
+        <li><a href="ai-assistant.html">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main id="lesson-root">
+  <!-- filled by JS -->
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex</span>
+      <span><a href="../index.html">กลับหน้าแรก</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../content/python-data.js"></script>
+<script src="../content/quiz-data.js"></script>
+<script src="../js/account.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  const root = document.getElementById('lesson-root');
+  const topicId = getParam('topic');
+  const topic = topicId ? findPythonTopicById(topicId) : null;
+
+  if (!topic || !topic.lesson) {
+    document.title = 'ไม่พบบทเรียน | CalcVortex';
+    root.innerHTML = `
+      <section class="section">
+        <div class="container">
+          <div class="empty-state">
+            <div class="glyph">🐍</div>
+            <h2>ยังไม่พบบทเรียนนี้</h2>
+            <p>เนื้อหาบทนี้กำลังจัดทำอยู่ กรุณากลับไปเลือกบทอื่นในหมวด Python</p>
+            <a href="python.html" class="btn btn-primary">กลับไปหน้า Python</a>
+          </div>
+        </div>
+      </section>
+    `;
+  } else {
+    const lesson = topic.lesson;
+    document.title = `${topic.title} — Python | CalcVortex`;
+
+    const examplesHtml = lesson.examples.map((ex, i) => `
+      <div class="lesson-block" style="margin-bottom:24px;">
+        ${lesson.examples.length > 1 ? `<span class="e-label" style="display:block; margin-bottom:8px;">ตัวอย่างที่ ${i + 1}</span>` : ''}
+        <pre class="py-code-block">${esc(ex.code)}</pre>
+        <span class="py-output-label">Output</span>
+        <pre class="py-output-block">${esc(ex.output)}</pre>
+      </div>
+    `).join('');
+
+    root.innerHTML = `
+      <section class="lesson-header">
+        <div class="container">
+          <div class="breadcrumb">
+            <a href="../index.html">หน้าแรก</a><span>/</span>
+            <a href="python.html">Python</a><span>/</span>
+            ${esc(topic.title)}
+          </div>
+          <span class="lesson-tag">บทที่ ${topic.order} จาก 12</span>
+          <h1>${esc(topic.title)}</h1>
+          <div class="lesson-actions">
+            <button class="icon-btn" id="bookmark-btn">🔖 บันทึกบทเรียน</button>
+            <button class="icon-btn" id="complete-btn">✅ ทำเครื่องหมายว่าเรียนแล้ว</button>
+            ${QUIZ_BANK && QUIZ_BANK[topicId] ? `<a class="icon-btn" href="quiz.html?topic=${topicId}">📝 ทำแบบทดสอบ</a>` : ''}
+            <a class="icon-btn" href="python-editor.html">🖥️ ลองรันโค้ดเอง</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="lesson-body">
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">📖</span><h2>คำอธิบาย</h2></div>
+          <p>${esc(lesson.description)}</p>
+        </div>
+
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">💻</span><h2>ตัวอย่าง Code</h2></div>
+          ${examplesHtml}
+        </div>
+
+        <div class="lesson-block">
+          <div class="lesson-block-head"><span class="ic">📝</span><h2>แบบฝึกหัด</h2></div>
+          <p style="color:var(--ink-soft); margin-top:-8px;">${esc(lesson.exercise)}</p>
+        </div>
+      </div>
+    `;
+
+    // ---- Wire up bookmark / mark-complete buttons (demo account system) ----
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    const completeBtn = document.getElementById('complete-btn');
+
+    function refreshActionButtons() {
+      const bookmarked = CVAccount.isBookmarked(topicId);
+      bookmarkBtn.classList.toggle('active', bookmarked);
+      bookmarkBtn.textContent = bookmarked ? '🔖 บันทึกไว้แล้ว' : '🔖 บันทึกบทเรียน';
+
+      const complete = CVAccount.isLessonComplete(topicId);
+      completeBtn.classList.toggle('done', complete);
+      completeBtn.textContent = complete ? '✅ เรียนจบแล้ว' : '✅ ทำเครื่องหมายว่าเรียนแล้ว';
+    }
+
+    bookmarkBtn.addEventListener('click', () => {
+      CVAccount.toggleBookmark(topicId);
+      refreshActionButtons();
+    });
+    completeBtn.addEventListener('click', () => {
+      if (CVAccount.isLessonComplete(topicId)) {
+        CVAccount.unmarkLessonComplete(topicId);
+      } else {
+        CVAccount.markLessonComplete(topicId);
+      }
+      refreshActionButtons();
+    });
+
+    refreshActionButtons();
+  }
+</script>
+</body>
+</html>

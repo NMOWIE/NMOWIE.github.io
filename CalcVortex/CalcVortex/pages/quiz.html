@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">แบบทดสอบ | CalcVortex</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand"><span class="brand-mark">CV</span>CalcVortex</a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html" aria-current="page">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html">เครื่องคิดเลข</a></li>
+        <li><a href="python.html">Python</a></li>
+        <li><a href="ai-assistant.html">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<main id="quiz-root">
+  <!-- filled by JS -->
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom"><span>© 2026 CalcVortex</span><span><a href="../index.html">กลับหน้าแรก</a></span></div>
+  </div>
+</footer>
+
+<script src="../content/mathematics-data.js"></script>
+<script src="../content/quiz-data.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/account.js"></script>
+<script>
+  function getParam(name) { return new URLSearchParams(window.location.search).get(name); }
+  function esc(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+
+  const root = document.getElementById('quiz-root');
+  const topicId = getParam('topic');
+  const found = topicId ? findTopicById(topicId) : null;
+  const questions = topicId ? QUIZ_BANK[topicId] : null;
+
+  if (!found || !questions) {
+    root.innerHTML = `
+      <section class="section"><div class="container">
+        <div class="empty-state">
+          <div class="glyph">📝</div>
+          <h2>ยังไม่มีแบบทดสอบสำหรับหัวข้อนี้</h2>
+          <p>ขณะนี้มีแบบทดสอบให้ในบทที่พร้อมเรียนแล้วเท่านั้น</p>
+          <a href="mathematics.html" class="btn btn-primary">กลับไปหน้าคณิตศาสตร์</a>
+        </div>
+      </div></section>`;
+  } else {
+    document.title = `แบบทดสอบ: ${found.topic.title} | CalcVortex`;
+    let current = 0;
+    const answers = new Array(questions.length).fill(null);
+
+    function renderQuestion() {
+      const q = questions[current];
+      root.innerHTML = `
+        <section class="lesson-header">
+          <div class="container">
+            <div class="breadcrumb">
+              <a href="../index.html">หน้าแรก</a><span>/</span>
+              <a href="lesson.html?topic=${topicId}">${esc(found.topic.title)}</a><span>/</span>
+              แบบทดสอบ
+            </div>
+            <span class="lesson-tag">คำถามที่ ${current + 1} จาก ${questions.length}</span>
+            <h1>แบบทดสอบ: ${esc(found.topic.title)}</h1>
+          </div>
+        </section>
+        <div class="lesson-body">
+          <div class="example-card">
+            <div class="e-problem" style="font-size:1.1rem;">${esc(q.q)}</div>
+            <div id="choice-list" style="display:grid; gap:10px; margin-top:16px;"></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+            <button class="btn btn-primary" id="next-btn" disabled>${current === questions.length - 1 ? 'ดูผลคะแนน' : 'ข้อถัดไป'}</button>
+          </div>
+        </div>
+      `;
+
+      const list = document.getElementById('choice-list');
+      q.choices.forEach((choice, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'topic-card';
+        btn.style.textAlign = 'left';
+        btn.style.cursor = 'pointer';
+        btn.innerHTML = `<span class="t-name">${esc(choice)}</span>`;
+        btn.addEventListener('click', () => {
+          answers[current] = idx;
+          list.querySelectorAll('.topic-card').forEach(el => el.style.borderColor = 'var(--border)');
+          btn.style.borderColor = 'var(--primary)';
+          document.getElementById('next-btn').disabled = false;
+        });
+        list.appendChild(btn);
+      });
+
+      document.getElementById('next-btn').addEventListener('click', () => {
+        if (current < questions.length - 1) {
+          current++;
+          renderQuestion();
+        } else {
+          renderResults();
+        }
+      });
+    }
+
+    function renderResults() {
+      const score = answers.reduce((acc, ans, i) => acc + (ans === questions[i].correct ? 1 : 0), 0);
+      if (CVAccount.getUser()) CVAccount.saveQuizScore(topicId, score, questions.length);
+
+      const reviewHtml = questions.map((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        return `
+          <div class="example-card">
+            <span class="e-label">ข้อ ${i + 1} — ${isCorrect ? '✅ ถูกต้อง' : '❌ ไม่ถูกต้อง'}</span>
+            <div class="e-problem">${esc(q.q)}</div>
+            <div class="e-approach">คำตอบที่ถูกต้อง: ${esc(q.choices[q.correct])}</div>
+          </div>`;
+      }).join('');
+
+      root.innerHTML = `
+        <section class="lesson-header">
+          <div class="container">
+            <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span>${esc(found.topic.title)}<span>/</span>ผลคะแนน</div>
+            <h1>ผลคะแนนของคุณ: ${score} / ${questions.length}</h1>
+          </div>
+        </section>
+        <div class="lesson-body">
+          <div class="lesson-block">
+            ${reviewHtml}
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <a href="lesson.html?topic=${topicId}" class="btn btn-secondary">กลับไปทบทวนบทเรียน</a>
+            <a href="quiz.html?topic=${topicId}" class="btn btn-primary" onclick="location.reload()">ทำแบบทดสอบอีกครั้ง</a>
+          </div>
+        </div>
+      `;
+    }
+
+    renderQuestion();
+  }
+</script>
+</body>
+</html>

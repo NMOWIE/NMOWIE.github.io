@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เครื่องคิดเลขวิทยาศาสตร์ | CalcVortex</title>
+<meta name="description" content="เครื่องคิดเลขวิทยาศาสตร์/วิศวกรรมของ CalcVortex พร้อมฟังก์ชันตรีโกณมิติ ลอการิทึม และประวัติการคำนวณ">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../css/calculator.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <span class="brand-mark">CV</span>
+      CalcVortex
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="../index.html">หน้าแรก</a></li>
+        <li><a href="mathematics.html">คณิตศาสตร์</a></li>
+        <li><a href="calculator.html" aria-current="page">เครื่องคิดเลข</a></li>
+        <li><a href="python.html">Python</a></li>
+        <li><a href="ai-assistant.html">AI ช่วยเรียน</a></li>
+        <li><a href="about.html">เกี่ยวกับเรา</a></li>
+        <li><a href="search.html" class="nav-icon-link" title="ค้นหา">🔍</a></li>
+        <li><a href="account.html" id="nav-account-link">เข้าสู่ระบบ</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="เปิดเมนู" aria-expanded="false">
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">หน้าแรก</a><span>/</span>เครื่องคิดเลข</div>
+      <h1>เครื่องคิดเลขวิทยาศาสตร์</h1>
+      <p style="color:var(--ink-soft); max-width:560px;">คำนวณฟังก์ชันตรีโกณมิติ ลอการิทึม กำลัง และรากที่สอง พร้อมย้อนดูประวัติการคำนวณก่อนหน้าได้ที่แผงด้านขวา</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="calc-shell">
+
+        <!-- ===== Calculator ===== -->
+        <div class="calc-card">
+          <div class="calc-toolbar">
+            <div class="calc-toolbar-left">
+              <button class="mode-btn" id="angle-mode-btn">DEG</button>
+              <button class="mode-btn" id="second-btn" title="สลับเป็นฟังก์ชันผกผัน (sin⁻¹, cos⁻¹, tan⁻¹)">2nd</button>
+            </div>
+            <span style="font-family:var(--font-mono); font-size:0.76rem; color:var(--ink-soft);">Scientific Calculator</span>
+          </div>
+
+          <div class="calc-screen"><span id="calc-display">0</span></div>
+
+          <div class="calc-keypad">
+            <button class="key key-fn" data-key="sin" id="lbl-sin-wrap"><span id="lbl-sin">sin</span></button>
+            <button class="key key-fn" data-key="cos"><span id="lbl-cos">cos</span></button>
+            <button class="key key-fn" data-key="tan"><span id="lbl-tan">tan</span></button>
+            <button class="key key-fn" data-key="(">(</button>
+            <button class="key key-fn" data-key=")">)</button>
+
+            <button class="key key-fn" data-key="log">log</button>
+            <button class="key key-fn" data-key="ln">ln</button>
+            <button class="key key-fn" data-key="sqrt">√</button>
+            <button class="key key-fn" data-key="x2">x²</button>
+            <button class="key key-fn" data-key="xy">xʸ</button>
+
+            <button class="key key-fn" data-key="pi">π</button>
+            <button class="key key-fn" data-key="e">e</button>
+            <button class="key key-clear" data-key="clear">C</button>
+            <button class="key key-clear" data-key="back">⌫</button>
+            <button class="key key-op" data-key="percent">%</button>
+
+            <button class="key" data-key="7">7</button>
+            <button class="key" data-key="8">8</button>
+            <button class="key" data-key="9">9</button>
+            <button class="key key-op" data-key="/">÷</button>
+            <button class="key key-op" data-key="^">^</button>
+
+            <button class="key" data-key="4">4</button>
+            <button class="key" data-key="5">5</button>
+            <button class="key" data-key="6">6</button>
+            <button class="key key-op" data-key="*">×</button>
+            <button class="key key-equals" data-key="equals" style="grid-row: span 2;">=</button>
+
+            <button class="key" data-key="1">1</button>
+            <button class="key" data-key="2">2</button>
+            <button class="key" data-key="3">3</button>
+            <button class="key key-op" data-key="-">−</button>
+
+            <button class="key key-wide" data-key="0">0</button>
+            <button class="key" data-key=".">.</button>
+            <button class="key key-op" data-key="+">+</button>
+          </div>
+        </div>
+
+        <!-- ===== History ===== -->
+        <div class="history-card">
+          <div class="history-head">
+            <h3>ประวัติการคำนวณ</h3>
+            <button class="history-clear-btn" id="clear-history-btn">ล้างประวัติ</button>
+          </div>
+          <ul id="history-list"></ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 CalcVortex</span>
+      <span><a href="../index.html">กลับหน้าแรก</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/account.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/calculator.js"></script>
+</body>
+</html>
